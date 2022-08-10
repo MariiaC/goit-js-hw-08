@@ -2,43 +2,45 @@ import throttle from "lodash.throttle";
 
 const formRef = document.querySelector('.feedback-form');
 const STORAGE_KEY = 'feedback-form-state';
-const formData = {}//виводь у консоль об'єкт з полями email, message
-
+let formData = {}//виводь у консоль об'єкт з полями email, message
 formRef.addEventListener('input', throttle(onFormInput, 500));
 formRef.addEventListener('submit', onFormSubmit);
-getForm();
+restoreFormData();
 
 
-function onFormInput(event) {
-    // console.log(event.target.name);
-    // console.log(event.target.value);
-
-    formData[event.target.name] = event.target.value;
+function onFormInput(event) { 
+    // console.log(event.target);
     // console.log(formData);
+    formData[event.target.name] = event.target.value;
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(formData))
 
     // console.log(formData);
-
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    const parsedData = JSON.parse(savedData);
-    console.log('parsedData', parsedData);
-    
 };
 
 function onFormSubmit (event) {
     event.preventDefault();
     //console.log('send form');//перевірка чи перезавант при submit
-    event.target.reset(); //очищуємо форму-інтерфейс(поля)
+    formRef.reset(); //очищуємо форму-інтерфейс(поля)
     localStorage.removeItem(STORAGE_KEY);//очищуємо локал сторедж
+    console.log(formData);
+    formData = {}; //очищуємо обєкт
 };
 
-function getForm() {
-    const savedMsg = localStorage.getItem(STORAGE_KEY);
-    if (savedMsg) {
-        formRef.value=savedMsg;//якщо є такий ключ, то збережеться у формі , в ін випадку -нул
-    }
+//считали первинні значення
+function restoreFormData() {
 
+    const savedMsg = localStorage.getItem(STORAGE_KEY);
+  
+    if (savedMsg) {
+        formData = JSON.parse(savedMsg);
+//console.log(formData);
+        formRef.email.value = formData.email;
+        formRef.message.value = formData.message;
+        // formRef.value=savedMsg;//якщо є такий ключ, то збережеться у формі , в ін випадку -нул
+    }
+    // console.log(formRef.email.value);
+    // console.log(formRef.message.value);
     // console.log(savedMsg);
 };
 
