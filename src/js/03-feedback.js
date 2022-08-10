@@ -9,8 +9,8 @@ restoreFormData();
 
 
 function onFormInput(event) { 
-    // console.log(event.target);
-    // console.log(formData);
+    //  console.log(event.target);
+    //  console.log(formData);
     formData[event.target.name] = event.target.value;
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(formData))
@@ -34,9 +34,10 @@ function restoreFormData() {
   
     if (savedMsg) {
         formData = JSON.parse(savedMsg);
-//console.log(formData);
-        formRef.email.value = formData.email;
-        formRef.message.value = formData.message;
+    //console.log(formData);
+        formRef.email.value = formData.email || '';
+        formRef.message.value = formData.message || '';
+
         // formRef.value=savedMsg;//якщо є такий ключ, то збережеться у формі , в ін випадку -нул
     }
     // console.log(formRef.email.value);
